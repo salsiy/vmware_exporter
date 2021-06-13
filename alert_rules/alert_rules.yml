@@ -1,0 +1,73 @@
+groups:
+  - name: Memory
+    rules:
+      - alert: VirtualMachineMemoryWarning
+        expr: vmware_vm_mem_usage_average / 100 >= 80
+        for: 5m
+        labels:
+          severity: warning
+          team: devops
+        annotations:
+          summary: Virtual Machine Memory Warning (instance {{ $labels.instance }})
+          description: High memory usage on {{ $labels.instance }}
+
+
+  - name: CPU
+    rules:
+      - alert: VirtualMachineCPUWarning
+        expr: vmware_vm_cpu_usagemhz_average / 100 >= 80
+        for: 5m
+        labels:
+          severity: warning
+          team: devops
+        annotations:
+          summary: Virtual Machine CPU Warning (instance {{ $labels.instance }})
+          description: High CPU usage on {{ $labels.instance }}
+  - name: Disk
+    rules:
+      - alert: VirtualMachineDiskWarning
+        expr: (vmware_vm_guest_disk_free )/ (vmware_vm_guest_disk_capacity) *100 < 20
+        for: 5m
+        labels:
+          severity: warning
+          team: devops
+        annotations:
+          summary: Virtual Machine Disk Warning (instance {{ $labels.instance }})
+          description: High Disk usage on {{ $labels.instance }}
+
+## Alerting rules for Host
+
+  - name: Host_Memroy
+    rules:
+      - alert: Host Mermory Warning
+        expr: (vmware_host_memory_usage)  / (vmware_host_memory_max) *100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          team: devops
+        annotations:
+          summary: Host Memory warning (instance {{ $labels.instance }})
+          description: Host Memory usage on {{ $labels.instance }}
+  - name: Host_CPU
+    rules:
+      - alert: Host CPU Warning
+        expr: (vmware_host_cpu_usagemhz_average) / (vmware_host_cpu_max) *100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          team: devops
+        annotations:
+          summary: Host CPU warning (instance {{ $labels.instance }})
+          description: Host CPU usage on {{ $labels.instance }}
+
+  - name: Host_Datastorage
+    rules:
+      - alert: Host datastorage Warning
+        expr: (vmware_datastore_freespace_size) / (vmware_datastore_capacity_size) *100 < 20
+        for: 5m
+        labels:
+          severity: warning
+          team: devops
+        annotations:
+          summary: Host datastorage warning (instance {{ $labels.instance }})
+          description: Host datastorage on {{ $labels.instance }}
